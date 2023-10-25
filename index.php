@@ -1,43 +1,58 @@
-s<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
-	<title>MySQL Table Viewer</title>
+    <title>MySQL Table Viewer</title>
 </head>
 <body>
-	<h1>MySQL Table Viewer</h1>
-	<?php
-		// Define database connection variables
-		$servername = "azmysqldb2.mysql.database.azure.com";
-		$username = "azroot";
-		$password = "Welcome@2024";
-		$dbname = "employees";
+    <h1>MySQL Table Viewer</h1>
 
-		// Create database connection
-		$conn = new mysqli($servername, $username, $password, $dbname);
+    <?php
+        // Start output buffering
+        ob_start();
 
-		// Check connection
-		if ($conn->connect_error) {
-			die("Connection failed: " . $conn->connect_error);
-		}
+        // Define database connection variables
+        $servername = "azmysqldb2.mysql.database.azure.com";
+        $username = "azroot";
+        $password = "Welcome@2024";
+        $dbname = "employees";
 
-		// Query database for all rows in the table
-		$sql = "SELECT * FROM employees";
-		$result = $conn->query($sql);
+        // Create database connection
+        $conn = new mysqli($servername, $username, $password, $dbname);
 
-		if ($result->num_rows > 0) {
-			// Display table headers
-			echo "<table><tr><th>ID</th><th>Name</th><th>Email</th></tr>";
-			// Loop through results and display each row in the table
-			while($row = $result->fetch_assoc()) {
-				echo "<tr><td>" . $row["id"] . "</td><td>" . $row["name"] . "</td><td>" . $row["email"] . "</td></tr>";
-			}
-			echo "</table>";
-		} else {
-			echo "0 results";
-		}
+        // Check connection
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
 
-		// Close database connection
-		$conn->close();
-	?>
+        // Query database for all rows in the table
+        $sql = "SELECT * FROM employees";
+        $result = $conn->query($sql);
+
+        if ($result->num_rows > 0) {
+            // Display table headers
+            echo "<table><tr><th>ID</th><th>Name</th><th>Email</th></tr>";
+
+            // Loop through results and display each row in the table
+            while ($row = $result->fetch_assoc()) {
+                echo "<tr><td>" . $row["emp_no"] . "</td><td>" . $row["first_name"] . "</td><td>" . $row["email_id"] . "</td></tr>";
+            }
+
+            echo "</table>";
+        } else {
+            echo "0 results";
+        }
+
+        // Close database connection
+        $conn->close();
+
+        // Get the buffered output
+        $html = ob_get_contents();
+
+        // Flush the buffer and send the output to the browser
+        ob_end_flush();
+
+        // Display the HTML table
+        echo $html;
+    ?>
 </body>
 </html>
